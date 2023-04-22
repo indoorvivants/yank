@@ -60,7 +60,7 @@ class TailwindCSS extends Tool {
     new Config(version = mp.getOrElse("version", ???))
 }
 
-object TailwindCSS {
+object TailwindCSS extends Tool.Companion(new TailwindCSS) {
   class Config(val version: String)
   object Config {
     def apply(version: String) = new Config(version)

@@ -83,4 +83,11 @@ object Tool {
       destination
     }
   }
+
+  private[yank] class Companion[T <: Tool](val default: T) {
+
+    def bootstrap(config: default.Config): Path =
+      Tool.bootstrap(default)(config)
+
+  }
 }

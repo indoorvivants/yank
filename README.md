@@ -9,6 +9,19 @@ ecosystems.
   - [D2](#d2)
 <!--toc:end-->
 
+Principles:
+
+- CLI tools are downloaded to a system-defined cache location, as reported by [dirs-dev](https://github.com/dirs-dev/directories-jvm) library, but can be customised
+- Tools are downloaded in a synchronous and blocking manner
+- Progress reporting and formatting are fully customisable
+
+|                | JVM  | 
+| -------------- | ---  | 
+| Scala 2.12  | ✅   | 
+| Scala 2.13   | ✅   | 
+| Scala 3    | ✅   | 
+
+
 
 ### Tailwind CSS
 
@@ -18,7 +31,7 @@ https://tailwindcss.com/docs/installation
 import com.indoorvivants.yank._
 
 val downloadedPath: java.nio.file.Path = 
-  Tool.bootstrap(new tools.TailwindCSS)(tools.TailwindCSS.Config(version = "3.2.7"))
+  tools.TailwindCSS.bootstrap(tools.TailwindCSS.Config(version = "3.2.7"))
 ```
 
 ### D2
@@ -29,16 +42,6 @@ https://d2lang.com/
 import com.indoorvivants.yank._
 
 val downloadedPath: java.nio.file.Path = 
-  Tool.bootstrap(new tools.D2)(tools.D2.Config(version = "0.4.1"))
+  tools.D2.bootstrap(tools.D2.Config(version = "0.4.1"))
 ```
-
-
-
-
-|                | JVM  | 
-| -------------- | ---  | 
-| Scala 2.12  | ✅   | 
-| Scala 2.13   | ✅   | 
-| Scala 3    | ✅   | 
-
 

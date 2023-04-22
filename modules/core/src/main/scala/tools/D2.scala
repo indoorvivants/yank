@@ -91,7 +91,7 @@ class D2 extends Tool {
     new Config(version = mp.getOrElse("version", ???))
 }
 
-object D2 {
+object D2 extends Tool.Companion(new D2) {
   class Config(val version: String)
   object Config {
     def apply(version: String) = new Config(version)
