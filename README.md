@@ -14,6 +14,7 @@ Principles:
 - CLI tools are downloaded to a system-defined cache location, as reported by [dirs-dev](https://github.com/dirs-dev/directories-jvm) library, but can be customised
 - Tools are downloaded in a synchronous and blocking manner
 - Progress reporting and formatting are fully customisable
+- Minimal dependencies - only dependency at this point is dirs-dev
 
 |                | JVM  | 
 | -------------- | ---  | 
