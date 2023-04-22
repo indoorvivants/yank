@@ -22,7 +22,7 @@ abstract class ToolsTestsBase(t: Tool, params: Map[String, String])
 
     val make = rnd.map { id =>
       {
-        val path = Path.of(sys.env("CACHE_BASE")).resolve(id)
+        val path = Paths.get(sys.env("CACHE_BASE")).resolve(id)
         Cache.inFolder(path) -> path
       }
     }
