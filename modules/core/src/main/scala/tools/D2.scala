@@ -19,7 +19,6 @@ package com.indoorvivants.yank.tools
 import java.nio.file.Files
 import java.nio.file.Path
 
-import com.indoorvivants.detective.Platform
 import com.indoorvivants.yank._
 
 class D2 extends Tool {
@@ -80,13 +79,16 @@ class D2 extends Tool {
       found = Some(p)
     }
 
-    // val ext = target.os match {
-    //   case Platform.OS.Windows => ".exe"
-    //   case _                   => ""
-    // }
-
-    ProcessOp.Copy(found.get)
+    ProcessOp.Copy(
+      found.get,
+      cleanup = () => {
+        FileUtils.deleteRecursively(tmpDir)
+      }
+    )
   }
+
+  override def readConfig(mp: Map[String, String]) =
+    new Config(version = mp.getOrElse("version", ???))
 }
 
 object D2 {

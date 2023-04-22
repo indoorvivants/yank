@@ -18,7 +18,6 @@ package com.indoorvivants.yank.tools
 
 import java.nio.file.Path
 
-import com.indoorvivants.detective.Platform
 import com.indoorvivants.yank._
 
 class TailwindCSS extends Tool {
@@ -55,7 +54,10 @@ class TailwindCSS extends Tool {
     s"$prefix-$os-$arch$ext"
   }
 
-  def process(downloaded: Path) = ProcessOp.Use
+  override def process(downloaded: Path) = ProcessOp.Use
+
+  override def readConfig(mp: Map[String, String]) =
+    new Config(version = mp.getOrElse("version", ???))
 }
 
 object TailwindCSS {

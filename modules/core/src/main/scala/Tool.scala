@@ -20,8 +20,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 
-import com.indoorvivants.detective.Platform
-
 trait Tool {
   type Config
 
@@ -29,6 +27,8 @@ trait Tool {
   def url(config: Config, target: Platform.Target): String
 
   def process(downloaded: Path): ProcessOp
+
+  def readConfig(params: Map[String, String]): Config
 }
 
 object Tool {
@@ -54,6 +54,8 @@ object Tool {
         downloader.download(url, tempDir.resolve(cacheKey)).get.toPath()
       val op = t.process(downloadDestination)
 
+      downloadDestination.toFile().deleteOnExit()
+
       op match {
         case ProcessOp.Use =>
           Files.copy(
@@ -65,12 +67,18 @@ object Tool {
           if (!destination.toFile().canExecute())
             destination.toFile().setExecutable(true)
 
-        case ProcessOp.Copy(other) =>
-          Files.copy(other, destination, StandardCopyOption.REPLACE_EXISTING)
+        case ProcessOp.Copy(other, cleanup) =>
+          try {
+            Files.copy(other, destination, StandardCopyOption.REPLACE_EXISTING)
+          } finally {
+            cleanup()
+          }
       }
 
       if (!destination.toFile().canExecute())
         destination.toFile().setExecutable(true)
+
+      downloadDestination.toFile().delete()
 
       destination
     }

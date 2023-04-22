@@ -1,49 +1,18 @@
-package com.indoorvivants.yank
+package com.indoorvivants.yank.tools
 
-import tools._
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
-class ToolsTests extends munit.FunSuite {
+import cats.effect.IO
+import cats.effect.kernel.Resource
+import cats.effect.std.Dispatcher
+import cats.effect.std.Random
+import cats.syntax.all._
+import com.indoorvivants.yank._
+import fs2.io.file
 
-  test("Tailwind") {
-    val (format, getLogs) = formatter
-    val bootstrap = Tool.bootstrap(
-      new TailwindCSS,
-      cache = cache,
-      downloader =
-        Downloader.basic(ProgressReporter.eachPercentStep(formatter = format))
-    )
+object TailwindTests
+    extends ToolsTestsBase(new TailwindCSS, Map("version" -> "3.2.7"))
 
-    println(bootstrap(TailwindCSS.Config(version = "3.2.7")))
-    println(getLogs())
-  }
-
-  test("D2") {
-    val (format, getLogs) = formatter
-    val bootstrap = Tool.bootstrap(
-      new D2,
-      cache = cache,
-      downloader =
-        Downloader.basic(ProgressReporter.eachPercentStep(formatter = format))
-    )
-
-    println(bootstrap(TailwindCSS.Config(version = "0.4.1")))
-    println(getLogs())
-  }
-
-  private val cache = Cache.inFolder(Path.of(sys.env("CACHE_BASE")))
-  private def formatter = {
-
-    val b = Vector.newBuilder[(Float, DownloadInProgress)]
-
-    val f = new ProgressFormatter {
-      def format(downloadedPercentage: Float, dip: DownloadInProgress) = {
-        b += (downloadedPercentage -> dip)
-        None
-      }
-
-    }
-
-    f -> (() => b.result())
-  }
-}
+object D2Tests extends ToolsTestsBase(new D2, Map("version" -> "0.4.1"))

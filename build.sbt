@@ -33,15 +33,9 @@ val Versions = new {
   val scalaVersions = Seq(Scala3, Scala212, Scala213)
 
   val dirs = "26"
-  val detective = "0.0.2"
+  val weaver = "0.8.3"
+  val fs2 = "3.6.1"
 }
-
-lazy val munitSettings = Seq(
-  libraryDependencies += {
-    "org.scalameta" %% "munit" % "1.0.0-M7" % Test
-  },
-  testFrameworks += new TestFramework("munit.Framework")
-)
 
 lazy val root = project
   .in(file("."))
@@ -54,7 +48,9 @@ lazy val core = projectMatrix
     name := "yank",
     Test / scalacOptions ~= filterConsoleScalacOptions,
     libraryDependencies += "dev.dirs" % "directories" % Versions.dirs,
-    libraryDependencies += "com.indoorvivants.detective" %% "platform" % Versions.detective,
+    libraryDependencies += "com.disneystreaming" %% "weaver-cats" % Versions.weaver % Test,
+    libraryDependencies += "co.fs2" %% "fs2-io" % Versions.fs2 % Test,
+    testFrameworks += new TestFramework("weaver.framework.CatsEffect"),
     buildInfoPackage := "com.indoorvivants.yank.internal",
     buildInfoKeys := Seq[BuildInfoKey](
       version,
@@ -62,9 +58,9 @@ lazy val core = projectMatrix
       scalaBinaryVersion
     ),
     Test / envVars ++= Map("CACHE_BASE" -> (Test / target).value.toString),
-    Test / fork := true
+    Test / fork := true,
+    Test / parallelExecution := true
   )
-  .settings(munitSettings)
   .jvmPlatform(Versions.scalaVersions)
   .enablePlugins(BuildInfoPlugin)
 

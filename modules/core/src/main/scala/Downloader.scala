@@ -39,12 +39,13 @@ object Downloader {
         val conn = url.openConnection()
         val contentLength = conn.getContentLengthLong()
         var is = Option.empty[InputStream]
-        val out = Option(new FileOutputStream(to.toFile))
+        val fout = new FileOutputStream(to.toFile)
+        val out = Option(new BufferedOutputStream(fout, bufSize))
         try {
           val inputStream = conn.getInputStream()
           is = Some(inputStream)
           var downloaded = 0L
-          val buffer = Array.ofDim[Byte](bufSize)
+          val buffer = Array.ofDim[Byte](16384)
           var length = 0
 
           // Looping until server finishes
@@ -61,11 +62,13 @@ object Downloader {
             }
 
           }
+          out.foreach(_.flush())
 
           to.toFile()
         } finally {
           is.foreach(_.close())
           out.foreach(_.close())
+          fout.close()
         }
 
       }
