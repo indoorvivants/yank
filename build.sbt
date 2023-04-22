@@ -9,7 +9,7 @@ inThisBuild(
     organization := "com.indoorvivants",
     organizationName := "Anton Sviridov",
     homepage := Some(
-      url("https://github.com/indoorvivants/mdoc-d2")
+      url("https://github.com/indoorvivants/yank")
     ),
     startYear := Some(2023),
     licenses := List(
@@ -88,7 +88,7 @@ val CICommands = Seq(
   "clean",
   "compile",
   "test",
-  "docs/mdoc",
+  "docs/mdoc --in README.md",
   "scalafmtCheckAll",
   "scalafmtSbtCheck",
   s"scalafix --check $scalafixRules",

@@ -22,7 +22,7 @@ import java.nio.file.Path
 import com.indoorvivants.yank._
 
 class D2 extends Tool {
-  type Config = TailwindCSS.Config
+  type Config = D2.Config
 
   override def cacheKey(c: Config) = s"d2-${c.version}"
   override def url(c: Config, t: Platform.Target): String =
