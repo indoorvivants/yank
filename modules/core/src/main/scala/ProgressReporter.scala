@@ -22,7 +22,7 @@ object ProgressReporter {
   def eachPercentStep(
       step: Float = 5,
       print: Printer = Printer.stderr,
-      formatter: ProgressFormatter = ProgressFormatter.autoColor
+      formatter: ProgressFormatter = ProgressFormatter.autoColor,
   ): ProgressReporter = dip => {
     var prev = 0f
     i =>

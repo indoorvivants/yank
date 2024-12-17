@@ -28,18 +28,18 @@ abstract class ToolsTestsBase(t: Tool, params: Map[String, String])
     }
     Resource
       .make(make)(c =>
-        file.Files[IO].deleteRecursively(file.Path.fromNioPath(c._2))
+        file.Files[IO].deleteRecursively(file.Path.fromNioPath(c._2)),
       )
       .map(_._1)
   }
 
-  test("Download afd save") { (cache, log) =>
+  test("Download and save") { (cache, log) =>
     formatter(log).use { case (format, logs) =>
       val bootstrap = Tool.bootstrap(
         t,
         cache = cache,
         downloader =
-          Downloader.basic(ProgressReporter.eachPercentStep(formatter = format))
+          Downloader.basic(ProgressReporter.eachPercentStep(formatter = format)),
       )
 
       IO(bootstrap(t.readConfig(params))).flatMap { path =>
@@ -51,8 +51,8 @@ abstract class ToolsTestsBase(t: Tool, params: Map[String, String])
             forEach(paths.distinct)(p =>
               expect.all(
                 p != path, // not downloading straight to cache
-                !p.toFile().exists() // temp file was removed
-              )
+                !p.toFile().exists(), // temp file was removed
+              ),
             )
           }
 
@@ -72,7 +72,7 @@ abstract class ToolsTestsBase(t: Tool, params: Map[String, String])
           def format(downloadedPercentage: Float, dip: DownloadInProgress) = {
             disp.unsafeRunSync(
               ref.update(_ :+ (downloadedPercentage -> dip)) *> log
-                .info(s"$downloadedPercentage %")
+                .info(s"$downloadedPercentage %"),
             )
             None
           }

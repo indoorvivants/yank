@@ -17,7 +17,7 @@
 package com.indoorvivants.yank
 
 import java.io._
-import java.net.URL
+import java.net.URI
 
 import scala.util.Try
 
@@ -29,13 +29,13 @@ object Downloader {
   def basic(reporter: ProgressReporter, bufSize: Int = 102400): Downloader =
     new Basic(
       bufSize,
-      reporter
+      reporter,
     )
   private class Basic(bufSize: Int, reporter: ProgressReporter)
       extends Downloader {
     def download(link: String, to: java.nio.file.Path) =
       Try {
-        val url = new URL(link)
+        val url = new URI(link).toURL()
         val conn = url.openConnection()
         val contentLength = conn.getContentLengthLong()
         var is = Option.empty[InputStream]
