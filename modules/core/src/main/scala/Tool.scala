@@ -37,7 +37,7 @@ object Tool {
       cache: Cache = Cache.system,
       downloader: Downloader =
         Downloader.basic(ProgressReporter.eachPercentStep(5, Printer.stderr)),
-      platform: Platform.Target = Platform.target
+      platform: Platform.Target = Platform.target,
   ): t.Config => Path = (conf: t.Config) => {
     val cacheKey = t.cacheKey(conf)
     val destination = cache.named(cacheKey)
@@ -61,7 +61,7 @@ object Tool {
           Files.copy(
             downloadDestination,
             destination,
-            StandardCopyOption.REPLACE_EXISTING
+            StandardCopyOption.REPLACE_EXISTING,
           )
 
           if (!destination.toFile().canExecute())

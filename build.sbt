@@ -2,34 +2,30 @@ Global / excludeLintKeys += logManager
 
 inThisBuild(
   List(
-    scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0",
-    semanticdbEnabled := true,
-    semanticdbVersion := scalafixSemanticdb.revision,
-    scalafixScalaBinaryVersion := scalaBinaryVersion.value,
     organization := "com.indoorvivants",
     organizationName := "Anton Sviridov",
     homepage := Some(
-      url("https://github.com/indoorvivants/yank")
+      url("https://github.com/indoorvivants/yank"),
     ),
     startYear := Some(2023),
     licenses := List(
-      "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
+      "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"),
     ),
     developers := List(
       Developer(
         "keynmol",
         "Anton Sviridov",
         "velvetbaldmime@protonmail.com",
-        url("https://blog.indoorvivants.com")
-      )
-    )
-  )
+        url("https://blog.indoorvivants.com"),
+      ),
+    ),
+  ),
 )
 
 val Versions = new {
-  val Scala213 = "2.13.10"
-  val Scala212 = "2.12.17"
-  val Scala3 = "3.2.2"
+  val Scala213 = "2.13.15"
+  val Scala212 = "2.12.20"
+  val Scala3 = "3.3.4"
   val scalaVersions = Seq(Scala3, Scala212, Scala213)
 
   val dirs = "26"
@@ -55,11 +51,11 @@ lazy val core = projectMatrix
     buildInfoKeys := Seq[BuildInfoKey](
       version,
       scalaVersion,
-      scalaBinaryVersion
+      scalaBinaryVersion,
     ),
     Test / envVars ++= Map("CACHE_BASE" -> (Test / target).value.toString),
     Test / fork := true,
-    Test / parallelExecution := true
+    Test / parallelExecution := true,
   )
   .jvmPlatform(Versions.scalaVersions)
   .enablePlugins(BuildInfoPlugin)
@@ -69,10 +65,10 @@ lazy val docs = project
   .settings(
     scalaVersion := Versions.Scala213,
     mdocVariables := Map(
-      "VERSION" -> version.value
+      "VERSION" -> version.value,
     ),
     publish / skip := true,
-    publishLocal / skip := true
+    publishLocal / skip := true,
   )
   .dependsOn(core.jvm(Versions.Scala213))
   .enablePlugins(MdocPlugin)
@@ -81,11 +77,12 @@ val scalafixRules = Seq(
   "OrganizeImports",
   "DisableSyntax",
   "LeakingImplicitClassVal",
-  "NoValInForComprehension"
+  "NoValInForComprehension",
 ).mkString(" ")
 
 val CICommands = Seq(
   "clean",
+  "scalafixEnable",
   "compile",
   "test",
   "docs/mdoc --in README.md",
@@ -95,15 +92,16 @@ val CICommands = Seq(
   "headerCheck",
   "undeclaredCompileDependenciesTest",
   "unusedCompileDependenciesTest",
-  "missinglinkCheck"
+  "missinglinkCheck",
 ).mkString(";")
 
 val PrepareCICommands = Seq(
+  "scalafixEnable",
   s"scalafix --rules $scalafixRules",
   "scalafmtAll",
   "scalafmtSbt",
   "headerCreate",
-  "undeclaredCompileDependenciesTest"
+  "undeclaredCompileDependenciesTest",
 ).mkString(";")
 
 addCommandAlias("ci", CICommands)

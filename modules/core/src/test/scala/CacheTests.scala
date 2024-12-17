@@ -19,7 +19,7 @@ object CacheTests extends weaver.FunSuite {
           .resolve("com.indoorvivants.yank")
           .resolve("test"),
       cache.named("test").getParent().toFile().isDirectory(),
-      !cache.named("test").toFile().exists()
+      !cache.named("test").toFile().exists(),
     )
   }
 }

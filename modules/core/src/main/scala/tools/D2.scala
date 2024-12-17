@@ -59,7 +59,7 @@ class D2 extends Tool {
       "zvxf",
       downloaded.toString(),
       "-C",
-      tmpDir.toString()
+      tmpDir.toString(),
     )
 
     val proc = new java.lang.ProcessBuilder(cmd: _*)
@@ -70,7 +70,7 @@ class D2 extends Tool {
 
     assert(
       exitCode == 0,
-      s"Unpacking D2 failed with code $exitCode. Full command: ${cmd.mkString(" ")}"
+      s"Unpacking D2 failed with code $exitCode. Full command: ${cmd.mkString(" ")}",
     )
 
     var found = Option.empty[Path]
@@ -83,7 +83,7 @@ class D2 extends Tool {
       found.get,
       cleanup = () => {
         FileUtils.deleteRecursively(tmpDir)
-      }
+      },
     )
   }
 
